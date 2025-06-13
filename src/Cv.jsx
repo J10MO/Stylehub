@@ -484,6 +484,58 @@ const ClothingStore = () => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
+  // Function to handle Instagram checkout
+  const handleInstagramCheckout = () => {
+    // Prepare order details
+    const orderDate = new Date().toLocaleDateString();
+    const orderTime = new Date().toLocaleTimeString();
+    const orderNumber = Math.random().toString(36).substr(2, 9).toUpperCase();
+    
+    let orderMessage = `🛍️ NEW ORDER FROM KATKOT FASHION\n\n`;
+    orderMessage += `📅 Date: ${orderDate}\n`;
+    orderMessage += `⏰ Time: ${orderTime}\n`;
+    orderMessage += `🔢 Order #: ${orderNumber}\n\n`;
+    orderMessage += `📦 ITEMS:\n`;
+    orderMessage += `${'='.repeat(30)}\n`;
+    
+    cart.forEach((item, index) => {
+      orderMessage += `${index + 1}. ${item.name}\n`;
+      orderMessage += `   💲 Price: $${item.price}\n`;
+      orderMessage += `   📏 Size: ${item.size}\n`;
+      orderMessage += `   🎨 Color: ${item.color}\n`;
+      orderMessage += `   📦 Qty: ${item.quantity}\n`;
+      orderMessage += `   💰 Subtotal: $${(item.price * item.quantity).toFixed(2)}\n`;
+      orderMessage += `   ${'-'.repeat(25)}\n`;
+    });
+    
+    orderMessage += `\n💵 TOTAL: $${getTotalPrice().toFixed(2)}\n`;
+    orderMessage += `📱 Items Count: ${getTotalItems()}\n\n`;
+    orderMessage += `📋 Please confirm this order and provide:\n`;
+    orderMessage += `• Customer name\n`;
+    orderMessage += `• Phone number\n`;
+    orderMessage += `• Delivery address\n`;
+    orderMessage += `• Preferred delivery method\n\n`;
+    orderMessage += `Thank you for choosing Katkot Fashion! ✨`;
+
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(orderMessage);
+    
+    // Open Instagram DM with the message
+    const instagramURL = `https://www.instagram.com/direct/new/?text=${encodedMessage}`;
+    
+    // Try to open Instagram app first, fallback to web
+    try {
+      window.open(instagramURL, '_blank');
+    } catch (error) {
+      // Fallback: Open Instagram profile page
+      window.open('https://www.instagram.com/katkot__fashion/', '_blank');
+    }
+    
+    // Clear cart after order is sent
+    setCart([]);
+    setIsCartOpen(false);
+  };
+
   // Header Component
   const Header = () => (
     <header className="bg-white/95 backdrop-blur-lg shadow-xl sticky top-0 z-50 border-b border-purple-100">
@@ -496,7 +548,7 @@ const ClothingStore = () => {
               <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-gold-400 absolute -top-1 -right-1 animate-bounce" />
             </div>
             <h1 className="text-lg sm:text-xl lg:text-3xl font-black bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 bg-clip-text text-transparent">
-              StyleHub
+              katkot fashion
             </h1>
             <div className="hidden sm:block">
               <span className="text-xs lg:text-sm bg-gradient-to-r from-gold-400 to-yellow-500 bg-clip-text text-transparent font-bold">LUXURY</span>
@@ -919,8 +971,11 @@ const ClothingStore = () => {
             <div className="flex justify-between items-center text-xl lg:text-2xl font-black text-gray-900">
               <span>Total: ${getTotalPrice().toFixed(2)}</span>
             </div>
-            <button className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-white py-3 lg:py-4 px-6 rounded-xl lg:rounded-2xl hover:from-purple-700 hover:to-blue-700 transition-all font-bold text-base lg:text-xl shadow-xl transform hover:scale-105">
-              Proceed to Checkout
+            <button 
+              onClick={handleInstagramCheckout}
+              className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-white py-3 lg:py-4 px-6 rounded-xl lg:rounded-2xl hover:from-purple-700 hover:to-blue-700 transition-all font-bold text-base lg:text-xl shadow-xl transform hover:scale-105"
+            >
+              📱 Complete Order via Instagram
             </button>
             <div className="flex items-center justify-center space-x-4 lg:space-x-6 text-xs lg:text-sm text-gray-600">
               <div className="flex items-center space-x-1">
@@ -1090,7 +1145,7 @@ const ClothingStore = () => {
             <Crown className="w-12 h-12 lg:w-16 lg:h-16 mx-auto text-gold-300 animate-bounce" />
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black mb-4 lg:mb-6">
-            Join the StyleHub 
+            Join the katkot fashion 
             <span className="block bg-gradient-to-r from-gold-300 to-yellow-200 bg-clip-text text-transparent">
               VIP Club
             </span>
@@ -1120,7 +1175,7 @@ const ClothingStore = () => {
               <div className="flex items-center space-x-3 mb-4 lg:mb-6">
                 <Crown className="w-6 h-6 lg:w-8 lg:h-8 text-purple-400" />
                 <h3 className="text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  StyleHub
+                  katkot fashion
                 </h3>
               </div>
               <p className="text-gray-400 text-sm lg:text-base leading-relaxed">
@@ -1148,7 +1203,7 @@ const ClothingStore = () => {
             <div>
               <h4 className="font-bold text-base lg:text-lg mb-4 lg:mb-6 text-white">Connect</h4>
               <ul className="space-y-2 lg:space-y-3 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors text-sm lg:text-base hover:underline">Instagram</a></li>
+                <li><a href="https://www.instagram.com/katkot__fashion/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors text-sm lg:text-base hover:underline">Instagram</a></li>
                 <li><a href="#" className="hover:text-white transition-colors text-sm lg:text-base hover:underline">Facebook</a></li>
                 <li><a href="#" className="hover:text-white transition-colors text-sm lg:text-base hover:underline">TikTok</a></li>
                 <li><a href="#" className="hover:text-white transition-colors text-sm lg:text-base hover:underline">Pinterest</a></li>
@@ -1159,7 +1214,7 @@ const ClothingStore = () => {
           <div className="border-t border-gray-800 mt-12 lg:mt-16 pt-6 lg:pt-8">
             <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
               <p className="text-gray-400 text-sm lg:text-base text-center lg:text-left">
-                &copy; 2025 StyleHub. All rights reserved.
+                &copy; 2025 katkot fashion. All rights reserved.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8 text-gray-400">
                 <div className="flex items-center space-x-2">
